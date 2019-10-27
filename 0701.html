@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            color:
+        }
+        body,html{
+            background-color: rgb(39,40,34);
+            color: #fff;
+            font-size: 14px;
+        }
+        .keyword{
+            color: #F92672;
+        }
+        .globalFn{
+            color:#A6E22E;
+        }
+        .num{
+            color: #AE81FF;
+        }
+        .can{
+            color: #FD971F;
+        }
+        .commit{
+            color: #4CF539;
+        }
+    </style>
+</head>
+<body>
+<pre id="txt">
+    // 这是注释
+    class Fn {
+        constructor (x, y) {
+            this.x = x;
+            this.y = y;
+        }
+        add () {
+            return this.x + this.y;
+        }
+        static show () {
+            console.log('Fn');
+        }
+    }
+    let obj = new Fn(2,3)
+    console.log(Object.keys(obj));
+    console.log(Object.getOwnPropertyNames(obj));
+</pre>
+    <script>
+        class Fn {
+            constructor (x, y) {
+                this.x = x;
+                this.y = y;
+            }
+            add () {
+                return this.x + this.y;
+            }
+            static show () {
+                console.log('Fn');
+            }
+        }
+        let obj = new Fn(2,3)
+        let oTxt = document.getElementById('txt')
+        let str = oTxt.innerHTML;
+        // 匹配关键字
+        let keyword = /abstract|arguments|break|case|catch|\bchar\b|class|\bconst\b|continue|debugger|default|delete|do|else|eval|export|extends|false|final|finally|float|for|function|goto|if|import|in|instanceof|int|let|new|null|return|static|super|switch|this|true|try|typeof|var|while|yield|=>/gi
+        let newStr = str.replace(keyword, function (item) {
+            return `<span class="keyword">${item}</span>`
+        });
+        let globalFn = /\.\w+\(/g;
+        let news = newStr.replace(globalFn, function (item) {
+            return `.<span class="globalFn">${item.substring(1,item.length-1)}</span>(`
+        })
+        let globalFn2 = /\b\w+\s?\(/g
+        let news1;
+        news1 = news.replace(globalFn2,function (item) {
+            return `<span class="globalFn">${item.substring(0,item.length-1)}</span>(`
+        });
+        let globalFn3 = /\d+/g
+        let news2;
+        news2 = news1.replace(globalFn3, function (item) {
+            return `<span class="num">${item}</span>`
+        });
+        let news3
+        let globalFn4 = /\([a-zA-Z]\w*\)/g;
+        news3 = news2.replace(globalFn4,function (item) {
+            return `(<span class="can">${item.substring(1,item.length-1)}</span>)`
+        });
+        let news4;
+        let globalFn5 = /\/\/\s?.+\s/g;
+        console.log(news3.match(globalFn5));
+        news4 = news3.replace(globalFn5,function (item) {
+            return `<span class="commit">${item}</span>`
+        })
+        oTxt.innerHTML = news4;
+    </script>
+</body>
+</html>
